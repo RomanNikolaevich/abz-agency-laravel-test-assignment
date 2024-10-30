@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Position;
+use App\Services\ImageProcessing\ImageProcessorService;
+use App\Services\ImageProcessing\Strategies\UrlImageSourceService;
 use App\Services\UkrainianPhoneNumberGeneratorService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -33,7 +35,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'phone' => $this->generateUkrainianPhoneNumber(),
             'position_id' => Position::inRandomOrder()->first()->id,
-            'photo' => 'default.jpeg',
+            'photo' => $this->generateRandomUserPhoto(),
         ];
     }
 
@@ -50,5 +52,18 @@ class UserFactory extends Factory
     private function generateUkrainianPhoneNumber(): string
     {
         return UkrainianPhoneNumberGeneratorService::generate();
+    }
+
+    private function generateRandomUserPhoto(): string
+    {
+        $imageSource = new UrlImageSourceService('https://thispersondoesnotexist.com/');
+        $processor = new ImageProcessorService($imageSource);
+
+        try {
+            return $processor->processAndStoreImage();
+        } catch (\Exception $e) {
+            \Log::error('Error generating user photo: ' . $e->getMessage());
+            return 'images/users/default.jpeg';
+        }
     }
 }
