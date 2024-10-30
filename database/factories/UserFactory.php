@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Position;
+use App\Services\UkrainianPhoneNumberGeneratorService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -30,7 +31,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'phone' => fake()->phoneNumber(),
+            'phone' => $this->generateUkrainianPhoneNumber(),
             'position_id' => Position::inRandomOrder()->first()->id,
             'photo' => 'default.jpeg',
         ];
@@ -44,5 +45,10 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    private function generateUkrainianPhoneNumber(): string
+    {
+        return UkrainianPhoneNumberGeneratorService::generate();
     }
 }
