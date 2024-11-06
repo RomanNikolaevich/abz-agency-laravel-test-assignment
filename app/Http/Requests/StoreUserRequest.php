@@ -23,9 +23,9 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:2|max:60',
-            'email' => 'required|string|email:rfc,dns|unique:users,email',
-            'phone' => 'required|string|regex:/^\+380\d{9}$/',
-            'position_id' => 'required|integer|exists:positions,id',
+            'email' => 'required|string|min:6|max:100|email:rfc,dns|unique:users,email',
+            'phone' => 'required|string|regex:/^[\+]{0,1}380([0-9]{9})$/',
+            'position_id' => 'required|integer|exists:positions,id|min:1',
             'photo' => 'required|file|mimes:jpeg,jpg|dimensions:min_width=70,min_height=70|max:5120',
             'password' => 'required|string|min:8',
         ];

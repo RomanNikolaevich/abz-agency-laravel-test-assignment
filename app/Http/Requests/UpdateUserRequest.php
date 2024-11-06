@@ -23,9 +23,9 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|required|string|min:2|max:60',
-            'email' => 'sometimes|required|string|email:rfc,dns|unique:users,email,' . $this->route('user')->id,
-            'phone' => 'sometimes|required|string|regex:/^\+380\d{9}$/',
-            'position_id' => 'sometimes|required|integer|exists:positions,id',
+            'email' => 'sometimes|required|string|min:6|max:100|email:rfc,dns|unique:users,email',
+            'phone' => 'sometimes|required|string|regex:/^[\+]{0,1}380([0-9]{9})$/',
+            'position_id' => 'sometimes|required|integer|exists:positions,id|min:1',
             'photo' => 'sometimes|file|mimes:jpeg,jpg|dimensions:min_width=70,min_height=70|max:5120',
             'password' => 'sometimes|required|string|min:8',
         ];
