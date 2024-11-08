@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Exceptions\ImageProcessingException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\IndexUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\ImageProcessing\ImageProcessorService;
 use App\Services\ImageProcessing\Strategies\UploadedImageSourceService;
@@ -17,11 +19,26 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(IndexUserRequest $request): JsonResponse
     {
-        $users = User::paginate(6);
+        $defaultCount = config('pagination.default_users_per_page');
+        $count = $request->input('count', default: $defaultCount);
+        $page = $request->input('page', default: 1);
 
-        return response()->json($users);
+        $users = User::query()->paginate($count, ['*'], 'page', $page);
+
+        return response()->json([
+            'success' => true,
+            'page' => $users->currentPage(),
+            'total_pages' => $users->lastPage(),
+            'total_users' => $users->total(),
+            'count' => $users->count(),
+            'links' => [
+                'next_link' => $users->nextPageUrl(),
+                'prev_link' => $users->previousPageUrl(),
+            ],
+            'users' => UserResource::collection($users)->resolve(),
+        ]);
     }
 
     /**
