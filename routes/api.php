@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\PositionController;
 use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Middleware\CheckTokenLastUsed;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('token', [AuthController::class, 'getToken']);
+        Route::get('/positions', [PositionController::class, 'index']);
         Route::get('logout', [AuthController::class, 'logout']);
     });
 
