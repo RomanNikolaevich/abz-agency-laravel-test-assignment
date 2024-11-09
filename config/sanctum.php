@@ -46,7 +46,7 @@ return [
     |
     */
 
-    'expiration' => null,
+    'expiration' => is_int(env('SANCTUM_TOKEN_EXPIRATION')) ? (int)env('SANCTUM_TOKEN_EXPIRATION') : null,
 
     /*
     |--------------------------------------------------------------------------

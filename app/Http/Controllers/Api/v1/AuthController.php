@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
+use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function __construct(private readonly TokenService $tokenService)
+    {
+    }
+
     public function login(LoginRequest $request): JsonResponse
     {
         $login = $request->validated();
@@ -21,7 +26,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
-        $token = $user->createToken('API Token')->plainTextToken;
+        $token = $this->tokenService->createToken($user);
 
         return response()->json([
             'token' => $token,
@@ -31,7 +36,8 @@ class AuthController extends Controller
 
     public function getToken(): JsonResponse
     {
-        $token = auth()->user()->createToken('API Token', ['create-user'])->plainTextToken;
+        $user = auth()->user();
+        $token = $this->tokenService->createToken($user);
 
         return response()->json([
             'success' => true,
