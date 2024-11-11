@@ -61,7 +61,11 @@ class UserController extends Controller
         $user = User::create($userStoreData);
 
 
-        return response()->json($user, 201);
+        return response()->json([
+            'success' => true,
+            'user_id' => $user->id,
+            'message' => 'New user successfully registered',
+        ], 201);
     }
 
     /**
@@ -99,7 +103,11 @@ class UserController extends Controller
         $user->update($userUpdateData);
 
 
-        return response()->json($user);
+        return response()->json([
+            'success' => true,
+            'user_id' => $user->id,
+            'message' => 'User successfully updated',
+        ], 200);
     }
 
     /**
