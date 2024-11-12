@@ -7,6 +7,8 @@
     @vite('resources/js/app.js')
 </head>
 <body class="h-full">
-<div id="app"></div>
+<div class="bg-white px-4 py-12 sm:px-6 lg:px-8">
+    <div id="app" class="mx-auto max-w-4xl"></div>
+</div>
 </body>
 </html>
