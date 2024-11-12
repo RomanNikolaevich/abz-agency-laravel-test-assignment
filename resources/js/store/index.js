@@ -2,13 +2,14 @@ import { createStore } from 'vuex';
 
 export default createStore({
     state: {
-        authToken: null,
+        authToken: localStorage.getItem('token') || null,
         users: [],
         currentUser: null
     },
     mutations: {
         setAuthToken(state, token) {
             state.authToken = token;
+            localStorage.setItem('token', token);
         },
         setUsers(state, users) {
             state.users = users;

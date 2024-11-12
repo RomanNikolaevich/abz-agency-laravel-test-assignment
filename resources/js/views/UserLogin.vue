@@ -60,10 +60,13 @@ export default {
 
         const handleLogin = async () => {
             try {
-                await axios.post('/api/v1/login', {
+                const response = await axios.post('/api/v1/login', {
                     email: email.value,
                     password: password.value,
                 });
+
+                const token = response.data.token;
+                localStorage.setItem('token', token);
 
                 router.push('/users');
             } catch (error) {
