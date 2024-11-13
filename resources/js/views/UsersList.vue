@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1 class="text-2xl font-semibold text-gray-900 mb-4">Users List</h1>
+
         <div v-if="error" class="text-red-500 font-bold">
             <p>{{ error }}</p>
         </div>
@@ -8,6 +9,19 @@
             <p>No users found</p>
         </div>
         <div v-else>
+
+            <div class="mb-4">
+                <label for="user-count" class="block text-sm font-medium text-gray-700">Users per page:</label>
+                <input
+                    type="number"
+                    id="user-count"
+                    v-model="userCount"
+                    @change="handleCountChange"
+                    min="1"
+                    class="mt-2 p-1 border border-gray-300 rounded-md"
+                />
+            </div>
+
             <ul class="divide-y divide-gray-100">
                 <li v-for="user in users" :key="user.id" class="flex justify-between gap-x-6 py-5">
                     <div class="flex min-w-0 gap-x-4">
@@ -30,7 +44,6 @@
                             Date of registration: {{ formatDate(user.registration_timestamp) }}
                         </p>
                     </div>
-
                 </li>
             </ul>
 
@@ -48,7 +61,9 @@
 
 <script>
 import axios from 'axios';
-import {ref, onMounted} from 'vue';
+import { ref, onMounted } from 'vue';
+
+const API_USERS_URL = '/api/v1/users';
 
 export default {
     name: 'UsersList',
@@ -56,16 +71,20 @@ export default {
         const users = ref([]);
         const error = ref(null);
         const nextPageUrl = ref(null);
+        const userCount = ref(null);
 
-        const fetchUsers = async (url = '/api/v1/users') => {
+        const fetchUsers = async (url = API_USERS_URL, reset = false) => {
             try {
                 const response = await axios.get(url, {
+                    params: {
+                        count: userCount.value
+                    },
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 });
 
-                if (!users.value.length) {
+                if (reset) {
                     users.value = response.data.users;
                 } else {
                     users.value.push(...response.data.users);
@@ -88,6 +107,10 @@ export default {
             return date.toLocaleDateString();
         };
 
+        const handleCountChange = () => {
+            fetchUsers(API_USERS_URL, true);
+        };
+
         onMounted(() => {
             fetchUsers();
         });
@@ -96,8 +119,10 @@ export default {
             users,
             error,
             nextPageUrl,
+            userCount,
             fetchUsers,
-            formatDate
+            formatDate,
+            handleCountChange
         };
     }
 };
