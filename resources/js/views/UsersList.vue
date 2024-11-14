@@ -37,14 +37,18 @@
             <ul class="divide-y divide-gray-100">
                 <li v-for="user in users" :key="user.id" class="flex justify-between gap-x-6 py-5">
                     <div class="flex min-w-0 gap-x-4">
-                        <img
-                            v-if="user.photo"
-                            :src="user.photo"
-                            alt="Profile avatar"
-                            class="h-12 w-12 flex-none rounded-full bg-gray-50"
-                        />
+                        <router-link :to="`/users/${user.id}`">
+                            <img
+                                v-if="user.photo"
+                                :src="user.photo"
+                                alt="Profile avatar"
+                                class="h-12 w-12 flex-none rounded-full bg-gray-50"
+                            />
+                        </router-link>
                         <div class="min-w-0 flex-auto">
-                            <p class="text-sm font-semibold text-gray-900">{{ user.name }}</p>
+                            <router-link :to="`/users/${user.id}`">
+                                <p class="text-sm font-semibold text-gray-900">{{ user.name }}</p>
+                            </router-link>
                             <p class="mt-1 truncate text-xs text-gray-500">{{ user.email }}</p>
                             <p class="mt-1 truncate text-xs text-gray-500">Reg. id: {{ user.id }}</p>
                         </div>
@@ -73,7 +77,7 @@
 
 <script>
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import {ref, onMounted} from 'vue';
 
 const API_USERS_URL = '/api/v1/users';
 
@@ -83,8 +87,8 @@ export default {
         const users = ref([]);
         const error = ref(null);
         const nextPageUrl = ref(null);
-        const userCount = ref(null);
-        const pageCount = ref(null);
+        const userCount = ref(6);
+        const pageCount = ref(1);
 
         const fetchUsers = async (url = API_USERS_URL, reset = false) => {
             try {
