@@ -22,6 +22,18 @@
                 />
             </div>
 
+            <div class="mb-4">
+                <label for="page-number" class="block text-sm font-medium text-gray-700">Page number:</label>
+                <input
+                    type="number"
+                    id="page-number"
+                    v-model="pageCount"
+                    @change="handlePageChange"
+                    min="1"
+                    class="mt-2 p-1 border border-gray-300 rounded-md"
+                />
+            </div>
+
             <ul class="divide-y divide-gray-100">
                 <li v-for="user in users" :key="user.id" class="flex justify-between gap-x-6 py-5">
                     <div class="flex min-w-0 gap-x-4">
@@ -49,7 +61,7 @@
 
             <div class="flex justify-left mt-4">
                 <button v-if="nextPageUrl"
-                        @click="fetchUsers(nextPageUrl)"
+                        @click="loadMore"
                         class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 >
                     Show more
@@ -72,12 +84,14 @@ export default {
         const error = ref(null);
         const nextPageUrl = ref(null);
         const userCount = ref(null);
+        const pageCount = ref(null);
 
         const fetchUsers = async (url = API_USERS_URL, reset = false) => {
             try {
                 const response = await axios.get(url, {
                     params: {
-                        count: userCount.value
+                        count: userCount.value,
+                        page: pageCount.value,
                     },
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -108,7 +122,17 @@ export default {
         };
 
         const handleCountChange = () => {
+            pageCount.value = 1;
             fetchUsers(API_USERS_URL, true);
+        };
+
+        const handlePageChange = () => {
+            fetchUsers(API_USERS_URL, true);
+        };
+
+        const loadMore = () => {
+            pageCount.value += 1;
+            fetchUsers(nextPageUrl.value);
         };
 
         onMounted(() => {
@@ -120,9 +144,12 @@ export default {
             error,
             nextPageUrl,
             userCount,
+            pageCount,
             fetchUsers,
             formatDate,
-            handleCountChange
+            handleCountChange,
+            handlePageChange,
+            loadMore
         };
     }
 };
