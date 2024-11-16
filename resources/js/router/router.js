@@ -4,6 +4,7 @@ import UserRegisterPage from '../views/pages/UserRegisterPage.vue';
 import UsersPage from '../views/pages/UsersPage.vue';
 import UserDetailPage from '../views/pages/UserDetailPage.vue';
 import PositionsList from '../views/components/PositionsList.vue';
+import LogoutPage from '../views/pages/LogoutPage.vue';
 
 const routes = [
     { path: '/', redirect: '/login' },
@@ -11,7 +12,8 @@ const routes = [
     { path: '/register', component: UserRegisterPage },
     { path: '/users', component: UsersPage },
     { path: '/users/:id', component: UserDetailPage, props: true },
-    { path: '/positions', component: PositionsList }
+    { path: '/positions', component: PositionsList },
+    { path: '/logout', component: LogoutPage }
 ];
 
 const router = createRouter({

@@ -9,7 +9,11 @@ export default createStore({
     mutations: {
         setAuthToken(state, token) {
             state.authToken = token;
-            localStorage.setItem('token', token);
+            if (token) {
+                localStorage.setItem('token', token);
+            } else {
+                localStorage.removeItem('token');
+            }
         },
         setUsers(state, users) {
             state.users = users;
@@ -23,6 +27,10 @@ export default createStore({
             const response = await fetch('/api/v1/users');
             const data = await response.json();
             commit('setUsers', data);
+        },
+        async logout({ commit }) {
+            commit('setAuthToken', null);
+            commit('setCurrentUser', null);
         }
     },
     modules: {}
