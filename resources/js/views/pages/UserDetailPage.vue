@@ -68,7 +68,7 @@
 import axios from 'axios';
 
 export default {
-    name: 'UserDetail',
+    name: 'UserDetailPage',
     props: ['id'],
     data() {
         return {
@@ -101,6 +101,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-</style>

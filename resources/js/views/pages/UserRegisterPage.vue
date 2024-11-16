@@ -7,9 +7,6 @@
 
 <script>
 export default {
-  name: 'UserRegister'
+  name: 'UserRegisterPage'
 };
 </script>
-
-<style scoped>
-</style>
