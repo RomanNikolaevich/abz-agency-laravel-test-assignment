@@ -4,6 +4,7 @@ import UserRegisterPage from '../views/pages/UserRegisterPage.vue';
 import UsersPage from '../views/pages/UsersPage.vue';
 import UserDetailPage from '../views/pages/UserDetailPage.vue';
 import PositionsList from '../views/components/PositionsList.vue';
+import TokenRefresher from "../views/components/TokenRefresher.vue";
 import LogoutPage from '../views/pages/LogoutPage.vue';
 
 const routes = [
@@ -13,6 +14,7 @@ const routes = [
     { path: '/users', component: UsersPage },
     { path: '/users/:id', component: UserDetailPage, props: true },
     { path: '/positions', component: PositionsList },
+    { path: '/token', component: TokenRefresher },
     { path: '/logout', component: LogoutPage }
 ];
 
