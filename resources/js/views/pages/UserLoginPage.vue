@@ -50,6 +50,7 @@
 import axios from 'axios';
 import {ref} from 'vue';
 import {useRouter} from 'vue-router';
+import {useStore} from "vuex";
 
 export default {
     name: 'UserLoginPage',
@@ -57,6 +58,7 @@ export default {
         const email = ref('');
         const password = ref('');
         const router = useRouter();
+        const store = useStore();
 
         const handleLogin = async () => {
             try {
@@ -66,7 +68,7 @@ export default {
                 });
 
                 const token = response.data.token;
-                localStorage.setItem('token', token);
+                store.commit('setAuthToken', token);
 
                 router.push('/users');
             } catch (error) {
