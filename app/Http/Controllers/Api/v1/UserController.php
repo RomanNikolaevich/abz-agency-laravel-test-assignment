@@ -11,11 +11,16 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\ImageProcessing\ImageProcessorService;
 use App\Services\ImageProcessing\Strategies\UploadedImageSourceService;
+use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
+    public function __construct(private readonly TokenService $tokenService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -60,10 +65,13 @@ class UserController extends Controller
 
         $user = User::create($userStoreData);
 
+        $token = $this->tokenService->createToken($user);
+
 
         return response()->json([
             'success' => true,
             'user_id' => $user->id,
+            'token' => $token,
             'message' => 'New user successfully registered',
         ], 201);
     }

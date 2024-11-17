@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('users', [UserController::class, 'store']);
+    Route::get('positions', [PositionController::class, 'index']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('token', [AuthController::class, 'getToken']);
-        Route::get('positions', [PositionController::class, 'index']);
         Route::get('logout', [AuthController::class, 'logout']);
         Route::get('users', [UserController::class, 'index']);
     });
