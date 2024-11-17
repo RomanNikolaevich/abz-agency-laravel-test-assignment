@@ -12,11 +12,12 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('token', [AuthController::class, 'getToken']);
-        Route::get('/positions', [PositionController::class, 'index']);
+        Route::get('positions', [PositionController::class, 'index']);
         Route::get('logout', [AuthController::class, 'logout']);
+        Route::get('users', [UserController::class, 'index']);
     });
 
     Route::middleware(['auth:sanctum', CheckTokenLastUsed::class])->group(function () {
-        Route::apiResource('users', UserController::class)->except(['store']);
+        Route::apiResource('users', UserController::class)->except(['index', 'store']);
     });
 });

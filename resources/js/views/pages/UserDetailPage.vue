@@ -87,7 +87,7 @@ export default {
                 this.user = response.data.user;
                 this.error = null;
             } catch (err) {
-                this.error = 'Failed to load user data. Please try again later.';
+                this.error = 'Failed to load user data. Receive a new token for further access.';
                 console.error('Error fetching user:', err);
             }
         },
